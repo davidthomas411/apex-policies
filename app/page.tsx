@@ -72,11 +72,16 @@ export default function Home() {
   const filteredBins = bins.filter(bin => {
     const matchesCategory = selectedCategory === null || 
       policyCategories.find(c => c.id === selectedCategory)?.name === bin.category
-    
+
+    const normalizedQuery = searchQuery.toLowerCase()
+    const matchesDocuments = normalizedQuery === '' ? false : bin.documents.some(doc =>
+      doc.fileName.toLowerCase().includes(normalizedQuery)
+    )
     const matchesSearch = searchQuery === '' ||
-      bin.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      bin.evidenceIndicator.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      bin.description.toLowerCase().includes(searchQuery.toLowerCase())
+      bin.title.toLowerCase().includes(normalizedQuery) ||
+      bin.evidenceIndicator.toLowerCase().includes(normalizedQuery) ||
+      bin.description.toLowerCase().includes(normalizedQuery) ||
+      matchesDocuments
     
     return matchesCategory && matchesSearch
   })

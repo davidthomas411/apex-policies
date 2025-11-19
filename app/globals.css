@@ -1,0 +1,86 @@
+@import 'tailwindcss';
+
+@theme inline {
+  /* Updated to Inter font */
+  --font-sans: var(--font-sans), system-ui, -apple-system, sans-serif;
+  
+  /* Updated color palette to TJU Brand Colors */
+  --color-background: #ffffff;
+  --color-foreground: #152456; /* TJU Deep Blue for text */
+  
+  --color-card: #ffffff;
+  --color-card-foreground: #152456;
+  
+  --color-popover: #ffffff;
+  --color-popover-foreground: #152456;
+  
+  --color-primary: #152456; /* TJU Deep Blue */
+  --color-primary-foreground: #ffffff;
+  
+  --color-secondary: #dfe1df; /* TJU Silver */
+  --color-secondary-foreground: #152456;
+  
+  --color-muted: #f1f5f9;
+  --color-muted-foreground: #4e5259; /* TJU Slate */
+  
+  --color-accent: #59b7df; /* TJU Bright Blue */
+  --color-accent-foreground: #152456;
+  
+  --color-destructive: #e53e30; /* TJU Academic Red */
+  --color-destructive-foreground: #ffffff;
+  
+  --color-border: #dfe1df; /* TJU Silver */
+  --color-input: #dfe1df;
+  --color-ring: #59b7df; /* TJU Bright Blue */
+  
+  --color-chart-1: #152456; /* TJU Deep Blue */
+  --color-chart-2: #59b7df; /* TJU Bright Blue */
+  --color-chart-3: #ece819; /* TJU Volt Green */
+  --color-chart-4: #4e5259; /* TJU Slate */
+  --color-chart-5: #8e9089; /* TJU Steel */
+  
+  --radius: 0.5rem;
+  
+  /* Added sidebar specific variables */
+  --color-sidebar: #152456;
+  --color-sidebar-foreground: #ffffff;
+  --color-sidebar-primary: #59b7df;
+  --color-sidebar-primary-foreground: #152456;
+  --color-sidebar-accent: #1e3a8a;
+  --color-sidebar-accent-foreground: #ffffff;
+  --color-sidebar-border: #1e3a8a;
+  --color-sidebar-ring: #59b7df;
+}
+
+.dark {
+  /* Dark mode adjustments preserving brand identity */
+  --color-background: #0a0a0a;
+  --color-foreground: #fafafa;
+  --color-card: #0a0a0a;
+  --color-card-foreground: #fafafa;
+  --color-popover: #0a0a0a;
+  --color-popover-foreground: #fafafa;
+  --color-primary: #59b7df; /* Bright Blue for dark mode primary */
+  --color-primary-foreground: #152456;
+  --color-secondary: #1e293b;
+  --color-secondary-foreground: #f8fafc;
+  --color-muted: #1e293b;
+  --color-muted-foreground: #94a3b8;
+  --color-accent: #1e293b;
+  --color-accent-foreground: #f8fafc;
+  --color-destructive: #991b1b;
+  --color-destructive-foreground: #fef2f2;
+  --color-border: #1e293b;
+  --color-input: #1e293b;
+  --color-ring: #59b7df;
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-feature-settings: "rlig" 1, "calt" 1;
+}

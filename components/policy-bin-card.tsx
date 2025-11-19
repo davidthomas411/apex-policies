@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { FileText, Upload, CheckCircle2, XCircle, Clock, ExternalLink } from 'lucide-react'
+import { FileText, Upload, CheckCircle2, XCircle, Clock } from 'lucide-react'
 import { PolicyBin } from '@/lib/policy-data'
 
 interface PolicyBinCardProps {
@@ -84,21 +84,21 @@ export function PolicyBinCard({ bin, onUpload }: PolicyBinCardProps) {
               <div key={doc.id} className="flex items-center justify-between gap-2 text-xs group">
                 <div className="flex items-center gap-2 min-w-0">
                   <FileText className="h-3 w-3 text-muted-foreground shrink-0" />
-                  <span className="truncate text-muted-foreground">{doc.fileName}</span>
+                  {doc.url ? (
+                    <a
+                      href={doc.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="truncate text-primary hover:underline"
+                    >
+                      {doc.fileName}
+                    </a>
+                  ) : (
+                    <span className="truncate text-muted-foreground">{doc.fileName}</span>
+                  )}
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   {getStatusIcon(doc.status)}
-                  {doc.url && (
-                    <a 
-                      href={doc.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 hover:bg-muted rounded"
-                      title="View Document"
-                    >
-                      <ExternalLink className="h-3 w-3 text-primary" />
-                    </a>
-                  )}
                 </div>
               </div>
             ))}

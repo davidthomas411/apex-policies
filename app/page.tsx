@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { DashboardSidebar } from '@/components/dashboard-sidebar'
 import { PolicyBinCard } from '@/components/policy-bin-card'
 import { BulkUploadDialog } from '@/components/bulk-upload-dialog'
+import { SingleUploadDialog } from '@/components/single-upload-dialog'
 import { policyBins, policyCategories, PolicyDocument } from '@/lib/policy-data'
 import { Input } from '@/components/ui/input'
 import { Search } from 'lucide-react'
@@ -14,6 +15,8 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [bulkUploadOpen, setBulkUploadOpen] = useState(false)
+  const [singleUploadOpen, setSingleUploadOpen] = useState(false)
+  const [singleUploadIndicator, setSingleUploadIndicator] = useState<string | null>(null)
   const [bins, setBins] = useState(policyBins)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -59,6 +62,11 @@ export default function Home() {
     }
 
     return updatedBins
+  }
+
+  const handleSingleUpload = (indicator: string) => {
+    setSingleUploadIndicator(indicator)
+    setSingleUploadOpen(true)
   }
 
   const filteredBins = bins.filter(bin => {
@@ -146,10 +154,7 @@ export default function Home() {
               <PolicyBinCard
                 key={bin.evidenceIndicator}
                 bin={bin}
-                onUpload={(indicator) => {
-                  // Individual upload would open a single file dialog
-                  console.log('Upload for', indicator)
-                }}
+                onUpload={handleSingleUpload}
               />
             ))}
           </div>
@@ -164,6 +169,18 @@ export default function Home() {
           )}
         </div>
       </main>
+
+      <SingleUploadDialog
+        open={singleUploadOpen}
+        evidenceIndicator={singleUploadIndicator}
+        onOpenChange={(open) => {
+          setSingleUploadOpen(open)
+          if (!open) {
+            setSingleUploadIndicator(null)
+          }
+        }}
+        onUploadComplete={handleUploadComplete}
+      />
 
       <BulkUploadDialog
         open={bulkUploadOpen}

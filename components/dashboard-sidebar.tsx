@@ -1,5 +1,6 @@
 'use client'
 
+import { useMemo, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -19,6 +20,16 @@ export function DashboardSidebar({
   onCategorySelect,
   onBulkUpload 
 }: DashboardSidebarProps) {
+  const [searchTerm, setSearchTerm] = useState('')
+
+  const filteredCategories = useMemo(() => {
+    if (!searchTerm.trim()) return policyCategories
+    const normalized = searchTerm.toLowerCase()
+    return policyCategories.filter(category =>
+      category.name.toLowerCase().includes(normalized)
+    )
+  }, [searchTerm])
+
   return (
     <div className="flex flex-col h-full border-r bg-gradient-to-b from-[#152456] to-[#0f1a3d] text-sidebar-foreground">
       <div className="p-6 pb-4">
@@ -40,8 +51,10 @@ export function DashboardSidebar({
         <div className="relative mb-4">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-sidebar-foreground/50" />
           <Input
-            placeholder="Search policies..."
+            placeholder="Search categories..."
             className="pl-8 bg-sidebar-accent/20 border-sidebar-border text-sidebar-foreground placeholder:text-sidebar-foreground/50 focus-visible:ring-sidebar-primary"
+            value={searchTerm}
+            onChange={event => setSearchTerm(event.target.value)}
           />
         </div>
 
@@ -74,19 +87,25 @@ export function DashboardSidebar({
             </p>
           </div>
 
-          {policyCategories.map((category) => (
-            <Button
-              key={category.id}
-              variant="ghost"
-              className={cn(
-                "w-full justify-start text-left h-auto py-2 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
-                selectedCategory === category.id && "bg-sidebar-accent text-sidebar-foreground font-medium"
-              )}
-              onClick={() => onCategorySelect(category.id)}
-            >
-              <span className="truncate">{category.name}</span>
-            </Button>
-          ))}
+          {filteredCategories.length === 0 ? (
+            <p className="px-3 py-2 text-xs text-sidebar-foreground/60">
+              No categories found.
+            </p>
+          ) : (
+            filteredCategories.map((category) => (
+              <Button
+                key={category.id}
+                variant="ghost"
+                className={cn(
+                  "w-full justify-start text-left h-auto py-2 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
+                  selectedCategory === category.id && "bg-sidebar-accent text-sidebar-foreground font-medium"
+                )}
+                onClick={() => onCategorySelect(category.id)}
+              >
+                <span className="truncate">{category.name}</span>
+              </Button>
+            ))
+          )}
         </div>
       </ScrollArea>
       

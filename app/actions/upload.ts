@@ -13,6 +13,7 @@ export async function uploadFile(formData: FormData) {
 
   const blob = await put(file.name, file, {
     access: 'public',
+    allowOverwrite: true,
   })
 
   revalidatePath('/')

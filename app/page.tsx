@@ -29,21 +29,36 @@ export default function Home() {
   }, [])
 
   const handleUploadComplete = async (documents: PolicyDocument[]) => {
-    const newBins = setBins(prevBins => {
-      const newBinsArray = [...prevBins]
-      documents.forEach(doc => {
-        const binIndex = newBinsArray.findIndex(b => b.evidenceIndicator === doc.evidenceIndicator)
-        if (binIndex !== -1) {
-          newBinsArray[binIndex] = {
-            ...newBinsArray[binIndex],
-            documents: [...newBinsArray[binIndex].documents, doc]
-          }
+    let updatedBins: PolicyBin[] = []
+
+    setBins(prevBins => {
+      const newBinsArray = prevBins.map(bin => {
+        const newDocuments = documents
+          .filter(doc => doc.evidenceIndicator === bin.evidenceIndicator)
+          .map(doc => ({
+            ...doc,
+            category: bin.category,
+          }))
+
+        if (newDocuments.length === 0) {
+          return bin
+        }
+
+        return {
+          ...bin,
+          documents: [...bin.documents, ...newDocuments],
         }
       })
-      saveMetadata(newBinsArray)
+
+      updatedBins = newBinsArray
       return newBinsArray
     })
-    return newBins
+
+    if (updatedBins.length > 0) {
+      await saveMetadata(updatedBins)
+    }
+
+    return updatedBins
   }
 
   const filteredBins = bins.filter(bin => {

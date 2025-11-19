@@ -13,6 +13,7 @@ export async function saveMetadata(bins: PolicyBin[]) {
     await put(METADATA_PATH, blob, {
       access: 'public',
       addRandomSuffix: false, // Keep the same filename
+      allowOverwrite: true,
     })
     
     return { success: true }

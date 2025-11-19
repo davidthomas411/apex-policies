@@ -16,6 +16,8 @@ export function PolicyBinCard({ bin, onUpload }: PolicyBinCardProps) {
   const pendingCount = bin.documents.filter(d => d.status === 'pending').length
   const approvedCount = bin.documents.filter(d => d.status === 'approved').length
   const rejectedCount = bin.documents.filter(d => d.status === 'rejected').length
+  const firstDocumentWithUrl = bin.documents.find(doc => doc.url)
+  const cardIsClickable = Boolean(firstDocumentWithUrl?.url)
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -25,8 +27,32 @@ export function PolicyBinCard({ bin, onUpload }: PolicyBinCardProps) {
     }
   }
 
+  const openPrimaryDocument = () => {
+    if (firstDocumentWithUrl?.url) {
+      window.open(firstDocumentWithUrl.url, '_blank', 'noopener,noreferrer')
+    }
+  }
+
+  const handleCardKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!cardIsClickable) return
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      openPrimaryDocument()
+    }
+  }
+
   return (
-    <Card className="hover:shadow-md transition-shadow">
+    <Card
+      className={`hover:shadow-md transition-shadow ${cardIsClickable ? 'cursor-pointer focus-visible:ring-2 focus-visible:ring-primary' : ''}`}
+      role={cardIsClickable ? 'button' : undefined}
+      tabIndex={cardIsClickable ? 0 : undefined}
+      onClick={() => {
+        if (cardIsClickable) {
+          openPrimaryDocument()
+        }
+      }}
+      onKeyDown={handleCardKeyDown}
+    >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex-1">
@@ -45,7 +71,10 @@ export function PolicyBinCard({ bin, onUpload }: PolicyBinCardProps) {
           <Button
             size="sm"
             variant="ghost"
-            onClick={() => onUpload(bin.evidenceIndicator)}
+            onClick={(event) => {
+              event.stopPropagation()
+              onUpload(bin.evidenceIndicator)
+            }}
             className="shrink-0"
           >
             <Upload className="h-4 w-4" />

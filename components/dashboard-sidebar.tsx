@@ -69,17 +69,27 @@ export function DashboardSidebar({
 
       <ScrollArea className="flex-1">
         <div className="px-4 pb-4 space-y-1">
-          <Button
-            variant="ghost"
-            className={cn(
-              "w-full justify-start gap-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground",
-              selectedCategory === null && "bg-sidebar-accent font-medium"
+          <div className="space-y-2">
+            <Button
+              variant="ghost"
+              className={cn(
+                "w-full justify-start gap-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground",
+                selectedCategory === null && "bg-sidebar-accent font-medium"
+              )}
+              onClick={() => onCategorySelect(null)}
+            >
+              <LayoutDashboard className="h-4 w-4" />
+              All Categories
+            </Button>
+            {selectedCategory !== null && (
+              <Button
+                className="w-full justify-center bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/90"
+                onClick={() => onCategorySelect(null)}
+              >
+                Clear Filter
+              </Button>
             )}
-            onClick={() => onCategorySelect(null)}
-          >
-            <LayoutDashboard className="h-4 w-4" />
-            All Categories
-          </Button>
+          </div>
 
           <div className="pt-4 pb-2">
             <p className="text-xs font-semibold text-sidebar-foreground/60 px-3 uppercase tracking-wider">

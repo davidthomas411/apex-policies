@@ -2,7 +2,6 @@
 
 import { put } from '@vercel/blob'
 import { revalidatePath } from 'next/cache'
-import { extractPdfText } from '@/lib/pdf-text'
 
 export async function uploadFile(formData: FormData) {
   const file = formData.get('file') as File
@@ -14,7 +13,6 @@ export async function uploadFile(formData: FormData) {
 
   const arrayBuffer = await file.arrayBuffer()
   const buffer = Buffer.from(arrayBuffer)
-  const content = await extractPdfText(buffer)
 
   const blob = await put(file.name, buffer, {
     access: 'public',
@@ -28,6 +26,5 @@ export async function uploadFile(formData: FormData) {
     fileName: file.name,
     evidenceIndicator,
     uploadedAt: new Date().toISOString(),
-    content,
   }
 }

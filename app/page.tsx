@@ -75,7 +75,8 @@ export default function Home() {
 
     const normalizedQuery = searchQuery.toLowerCase()
     const matchesDocuments = normalizedQuery === '' ? false : bin.documents.some(doc =>
-      doc.fileName.toLowerCase().includes(normalizedQuery)
+      doc.fileName.toLowerCase().includes(normalizedQuery) ||
+      (doc.content ? doc.content.toLowerCase().includes(normalizedQuery) : false)
     )
     const matchesSearch = searchQuery === '' ||
       bin.title.toLowerCase().includes(normalizedQuery) ||

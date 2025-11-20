@@ -51,7 +51,8 @@ export async function loadMetadata(): Promise<PolicyBin[] | null> {
       ...bin,
       documents: bin.documents.map(doc => ({
         ...doc,
-        uploadedAt: new Date(doc.uploadedAt)
+        uploadedAt: new Date(doc.uploadedAt),
+        content: doc.content ?? '',
       }))
     }))
     

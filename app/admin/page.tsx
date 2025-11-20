@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import { PolicyBin, PolicyDocument, policyBins } from '@/lib/policy-data'
 import { loadMetadata, saveMetadata } from '@/app/actions/metadata'
+import { reindexDocumentContent } from '@/app/actions/reindex'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -39,6 +40,8 @@ export default function AdminPage() {
   const [formState, setFormState] = useState(defaultFormState)
   const [isSaving, setIsSaving] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [isReindexing, setIsReindexing] = useState(false)
+  const [reindexMessage, setReindexMessage] = useState<string | null>(null)
 
   useEffect(() => {
     async function loadBins() {
@@ -132,6 +135,22 @@ export default function AdminPage() {
     setBins(updatedBins)
     await saveMetadata(updatedBins)
     setDeletingId(null)
+  }
+
+  const handleReindex = async () => {
+    setIsReindexing(true)
+    setReindexMessage(null)
+    const result = await reindexDocumentContent()
+    if (result.success) {
+      setReindexMessage(`Indexed ${result.parsedCount} document${result.parsedCount === 1 ? '' : 's'}.`)
+      const refreshed = await loadMetadata()
+      if (refreshed) {
+        setBins(refreshed)
+      }
+    } else {
+      setReindexMessage(result.message ?? 'Failed to reindex documents.')
+    }
+    setIsReindexing(false)
   }
 
   if (isLoading) {
@@ -235,6 +254,23 @@ export default function AdminPage() {
                 </Button>
               </div>
             </form>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Search Index</CardTitle>
+            <CardDescription>
+              Parse all existing PDFs to refresh searchable text content. This may take a minute.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Button onClick={handleReindex} disabled={isReindexing}>
+              {isReindexing ? 'Parsing documents…' : 'Rebuild Search Index'}
+            </Button>
+            {reindexMessage && (
+              <p className="text-sm text-muted-foreground">{reindexMessage}</p>
+            )}
           </CardContent>
         </Card>
 

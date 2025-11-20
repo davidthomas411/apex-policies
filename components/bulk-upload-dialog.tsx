@@ -87,7 +87,8 @@ export function BulkUploadDialog({ open, onOpenChange, onUploadComplete }: BulkU
           category: 'Uncategorized', // This will be fixed by the parent component
           uploadedAt: new Date(result.uploadedAt),
           status: 'pending',
-          url: result.url
+          url: result.url,
+          content: result.content ?? ''
         }
         uploadedDocs.push(doc)
       }

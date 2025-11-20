@@ -58,6 +58,7 @@ export function SingleUploadDialog({
         uploadedAt: new Date(result.uploadedAt),
         status: 'pending',
         url: result.url,
+        content: result.content ?? '',
       }
 
       onUploadComplete([doc])

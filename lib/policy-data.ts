@@ -6,6 +6,7 @@ export interface PolicyDocument {
   uploadedAt: Date
   status: 'pending' | 'approved' | 'rejected'
   url?: string
+  content?: string
 }
 
 export interface PolicyBin {

@@ -1,7 +1,4 @@
-import { PDFParse } from 'pdf-parse'
-
-const WORKER_URL = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.296/legacy/build/pdf.worker.min.mjs'
-PDFParse.setWorker(WORKER_URL)
+import { PDFParse } from 'pdf-parse/node'
 
 export async function extractPdfText(buffer: Buffer) {
   try {

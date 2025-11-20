@@ -1,4 +1,4 @@
-import { PDFParse } from 'pdf-parse/node'
+import { PDFParse } from 'pdf-parse'
 
 export async function extractPdfText(buffer: Buffer) {
   try {
